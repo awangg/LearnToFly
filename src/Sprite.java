@@ -12,16 +12,14 @@ public class Sprite {
     private Point loc; //top left corner of this Sprite. Note loc.x and loc.y are the easy way to access the point.
     private int dir, picOrientation; //dir is the current direction in degrees.  See the constants below.
     private BufferedImage pic; //put the file in the res folder.
-    private int speed; //Number of pixels moved each frame.
     private int id;
     public static final int NORTH = 90, SOUTH = 270, WEST = 180, EAST = 0, NE = 45, NW = 135, SW = 225, SE = 315;
 
 
-    public Sprite(int x, int y, int direction, int s) {
+    public Sprite(int x, int y, int direction) {
         loc = new Point(x, y);
         dir = direction;
         setPic("blank.png", NORTH);
-        speed = s;
 
         id = nextID;
         nextID++;
@@ -40,15 +38,6 @@ public class Sprite {
 //        g2.drawImage(op.filter(pic, null), loc.x, loc.y, null);
         g2.drawImage(pic, loc.x, loc.y, null);
         g2.rotate(-rotationRequired, loc.x+locationX, loc.y+locationX);
-    }
-
-    /**
-     * Moves the pic in the direction the Sprite is facing (dir).
-     */
-    public void update() {
-        int dx = (int) (Math.cos(Math.toRadians(dir)) * speed);
-        int dy = -(int) (Math.sin(Math.toRadians(dir)) * speed);
-        loc.translate(dx, dy);
     }
 
     /**
@@ -196,20 +185,6 @@ public class Sprite {
      */
     public boolean intersects(Sprite other){
         return getBoundingRectangle().intersects(other.getBoundingRectangle());
-    }
-
-    /**
-     Changes the speed of this Sprite
-     */
-    public void setSpeed(int newSpeed){
-        speed = newSpeed;
-    }
-
-    /**
-     Returns the current speed of this Sprite
-     */
-    public int getSpeed() {
-        return speed;
     }
 
     public void flipImageHoriz(){
