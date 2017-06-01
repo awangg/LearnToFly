@@ -6,6 +6,5 @@ public class Penguin extends Sprite {
     }
 
     public void update() {
-
     }
 }
