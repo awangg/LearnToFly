@@ -4,4 +4,8 @@ public class Penguin extends Sprite {
         super(x, y, dir);
         setPic("penguin.png", EAST);
     }
+
+    public void update() {
+
+    }
 }
