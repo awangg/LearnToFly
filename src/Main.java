@@ -2,17 +2,38 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 
 public class Main extends JPanel {
     final static int FRAMEWIDTH = 1200; final static int FRAMEHEIGHT = 600;
     Timer timer;
-    public int state = 1;
+    static int state = 1;
+    static boolean[] keys;
 
     public Main() {
+        keys = new boolean[512];
         timer = new Timer(50, new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
 
+            }
+        });
+
+        addKeyListener(new KeyListener() {
+            @Override
+            public void keyTyped(KeyEvent e) {
+
+            }
+
+            @Override
+            public void keyPressed(KeyEvent e) {
+                keys[e.getKeyCode()] = true;
+            }
+
+            @Override
+            public void keyReleased(KeyEvent e) {
+                keys[e.getKeyCode()] = false;
             }
         });
     }
