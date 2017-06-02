@@ -16,6 +16,7 @@ public class SaveGetter {
             save = reader.read(PenguinSave.class);
         } catch (FileNotFoundException e) {
             e.printStackTrace();
+
         } catch (YamlException e) {
             e.printStackTrace();
         }

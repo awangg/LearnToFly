@@ -1,3 +1,4 @@
+import save.CreateSave;
 import save.SaveGetter;
 
 import javax.swing.*;
@@ -6,6 +7,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.io.File;
 
 public class Main extends JPanel {
     final static int FRAMEWIDTH = 1200; final static int FRAMEHEIGHT = 600;
@@ -71,6 +73,10 @@ public class Main extends JPanel {
 
     public static void main(String[] args) throws Exception {
         saveGetter = new SaveGetter();
+        CreateSave cs = new CreateSave();
+        File save = new File(System.getProperty("user.home") + "/learntofly/penguin.yml");
+        if(!save.exists())
+            cs.create();
 
         JFrame window = new JFrame("Learn To Fly!");
         window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
