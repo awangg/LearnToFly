@@ -12,11 +12,13 @@ import java.io.File;
 public class Main extends JPanel {
     final static int FRAMEWIDTH = 1200; final static int FRAMEHEIGHT = 600;
     Timer timer;
-    public static boolean movingUp = false;
+    public static boolean movingUp = false, movingDown = false;
     static int state = 1;
     static boolean[] keys;
     Penguin player;
     private static SaveGetter saveGetter;
+
+    int x = 500, y = 50;
 
     public Main() {
         keys = new boolean[512];
@@ -24,8 +26,8 @@ public class Main extends JPanel {
         timer = new Timer(40, new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                player.update();
                 controls();
+
                 repaint();
             }
         });
@@ -51,10 +53,10 @@ public class Main extends JPanel {
 
     public void controls() {
         if(keys[KeyEvent.VK_A]) {
-            movingUp = true;
+            movingUp = true; movingDown = false;
             player.rotateBy(5);
         }else if(keys[KeyEvent.VK_D]) {
-            movingUp = false;
+            movingUp = false; movingDown = false;
             player.rotateBy(-5);
         }else if(keys[KeyEvent.VK_ESCAPE]) {
             System.exit(0);
@@ -68,6 +70,9 @@ public class Main extends JPanel {
             g2.setColor(Color.CYAN);
             g2.fillRect(0, 0, FRAMEWIDTH, FRAMEHEIGHT);
             player.draw(g2);
+
+            g2.setColor(Color.BLACK);
+            g2.drawOval(x, y, 50, 50);
         }
     }
 
