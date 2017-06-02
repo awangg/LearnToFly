@@ -1,3 +1,5 @@
+import save.SaveGetter;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -12,6 +14,7 @@ public class Main extends JPanel {
     static int state = 1;
     static boolean[] keys;
     Penguin player;
+    private static SaveGetter saveGetter;
 
     int x = 500, y = 50;
 
@@ -72,6 +75,8 @@ public class Main extends JPanel {
     }
 
     public static void main(String[] args) throws Exception {
+        saveGetter = new SaveGetter();
+
         JFrame window = new JFrame("Learn To Fly!");
         window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         window.setBounds(0, 0, FRAMEWIDTH, FRAMEHEIGHT + 22); //(x, y, w, h) 22 due to title bar.
