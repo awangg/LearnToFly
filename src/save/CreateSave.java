@@ -2,6 +2,7 @@ package save;
 
 import com.esotericsoftware.yamlbeans.YamlWriter;
 
+import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 
@@ -13,6 +14,9 @@ public class CreateSave {
         PenguinSave ps = new PenguinSave();
         ps.level = 1;
         try {
+            File f = new File(System.getProperty("user.home") + "/learntofly/penguin.yml");
+            f.getParentFile().mkdirs();
+            f.createNewFile();
             YamlWriter writer = new YamlWriter(new FileWriter(System.getProperty("user.home") + "/learntofly/penguin.yml"));
             writer.write(ps);
             writer.close();
