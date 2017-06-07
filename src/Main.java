@@ -57,6 +57,7 @@ public class Main extends JPanel {
             }
         });
     }
+    // HA YEESTI
 
     public void controls() {
         if(keys[KeyEvent.VK_A]) {
