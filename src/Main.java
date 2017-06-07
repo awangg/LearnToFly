@@ -18,6 +18,8 @@ public class Main extends JPanel {
     Penguin player;
     private static SaveGetter saveGetter;
 
+    public static int rocket, glider, payload, sled = 0;
+
     int x = 500, y = 50;
 
     public Main() {
