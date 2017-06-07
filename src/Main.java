@@ -1,7 +1,9 @@
+import save.CreateSave;
 import save.SaveGetter;
 
 import javax.swing.*;
 import java.awt.*;
+import java.io.File;
 import java.awt.event.*;
 
 public class Main extends JPanel {
@@ -49,33 +51,6 @@ public class Main extends JPanel {
                 keys[e.getKeyCode()] = false;
             }
         });
-
-        addMouseListener(new MouseListener() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-
-            }
-
-            @Override
-            public void mousePressed(MouseEvent e) {
-                pointer = new Rectangle(e.getX(), e.getY(), 12, 20);
-            }
-
-            @Override
-            public void mouseReleased(MouseEvent e) {
-                pointer = new Rectangle(-100, -100, 12, 20);
-            }
-
-            @Override
-            public void mouseEntered(MouseEvent e) {
-
-            }
-
-            @Override
-            public void mouseExited(MouseEvent e) {
-
-            }
-        });
     }
 
     public void controls() {
@@ -93,15 +68,7 @@ public class Main extends JPanel {
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
         Graphics2D g2 = (Graphics2D) g;
-        if(state == 2) {
-            g2.setColor(Color.WHITE);
-            g2.fillRect(0, 0, FRAMEWIDTH, FRAMEHEIGHT);
-
-            g2.setColor(Color.RED);
-            for(Rectangle r : buttons) {
-                g2.fill(r);
-            }
-        }else if(state == 1) {
+        if(state == 1) {
             g2.setColor(Color.CYAN);
             g2.fillRect(0, 0, FRAMEWIDTH, FRAMEHEIGHT);
             player.draw(g2);
