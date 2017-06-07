@@ -3,14 +3,17 @@ import save.SaveGetter;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.io.File;
-import java.awt.event.*;
 
 public class Main extends JPanel {
     final static int FRAMEWIDTH = 1200; final static int FRAMEHEIGHT = 600;
     Timer timer;
     public static boolean movingUp = false, movingDown = false;
-    static int state = 2;
+    static int state = 1;
     static boolean[] keys;
     Penguin player;
     private static SaveGetter saveGetter;
@@ -19,6 +22,8 @@ public class Main extends JPanel {
     new Rectangle(600, 100, 120, 120), new Rectangle(600, 300, 120, 120)};
 
     static Rectangle pointer = new Rectangle(-100, -100, 12, 20);
+
+    public static int rocket, glider, payload, sled = 0;
 
     int x = 500, y = 50;
 
@@ -80,6 +85,10 @@ public class Main extends JPanel {
 
     public static void main(String[] args) throws Exception {
         saveGetter = new SaveGetter();
+        CreateSave cs = new CreateSave();
+        File save = new File(System.getProperty("user.home") + "/learntofly/penguin.yml");
+        if(!save.exists())
+            cs.create();
 
         JFrame window = new JFrame("Learn To Fly!");
         window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
