@@ -3,16 +3,13 @@ import save.SaveGetter;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
+import java.awt.event.*;
 import java.io.File;
 
 public class Main extends JPanel {
     final static int FRAMEWIDTH = 1200; final static int FRAMEHEIGHT = 600;
     Timer timer;
-    public static boolean movingUp = false, movingDown = false;
+    public static boolean changingPhase = false;
     static int state = 1;
     static boolean[] keys;
     Penguin player;
@@ -34,7 +31,13 @@ public class Main extends JPanel {
             @Override
             public void actionPerformed(ActionEvent e) {
                 controls();
-
+                if(state == 2) {
+                    if(pointer.intersects(buttons[0])) {
+                        state = 1;
+                    }
+                }else if(state == 1) {
+                    player.update();
+                }
                 repaint();
             }
         });
@@ -56,15 +59,40 @@ public class Main extends JPanel {
                 keys[e.getKeyCode()] = false;
             }
         });
+
+        addMouseListener(new MouseListener() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+
+            }
+
+            @Override
+            public void mousePressed(MouseEvent e) {
+//                System.out.println("yeet");
+                pointer = new Rectangle(e.getX(), e.getY(), 12, 16);
+            }
+
+            @Override
+            public void mouseReleased(MouseEvent e) {
+//                pointer = new Rectangle(-100, -100, 12, 22);
+            }
+
+            @Override
+            public void mouseEntered(MouseEvent e) {
+
+            }
+
+            @Override
+            public void mouseExited(MouseEvent e) {
+
+            }
+        });
     }
-    // HA YEESTI
 
     public void controls() {
-        if(keys[KeyEvent.VK_A]) {
-            movingUp = true; movingDown = false;
+        if(keys[KeyEvent.VK_A] && player.getDir() < 180) {
             player.rotateBy(5);
-        }else if(keys[KeyEvent.VK_D]) {
-            movingUp = false; movingDown = false;
+        }else if(keys[KeyEvent.VK_D] && player.getDir() > 0) {
             player.rotateBy(-5);
         }else if(keys[KeyEvent.VK_ESCAPE]) {
             System.exit(0);
@@ -78,9 +106,11 @@ public class Main extends JPanel {
             g2.setColor(Color.CYAN);
             g2.fillRect(0, 0, FRAMEWIDTH, FRAMEHEIGHT);
             player.draw(g2);
-
-            g2.setColor(Color.BLACK);
-            g2.drawOval(x, y, 50, 50);
+        }else if(state == 2) {
+            for(Rectangle r : buttons) {
+                g2.fill(r);
+            }
+            g2.fill(pointer);
         }
     }
 

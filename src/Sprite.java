@@ -1,6 +1,7 @@
 import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.geom.AffineTransform;
+import java.awt.geom.Point2D;
 import java.awt.image.AffineTransformOp;
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -10,6 +11,7 @@ public class Sprite {
     private static int nextID = 1;
 
     private Point loc; //top left corner of this Sprite. Note loc.x and loc.y are the easy way to access the point.
+    private double x, y;
     private int dir, picOrientation; //dir is the current direction in degrees.  See the constants below.
     private BufferedImage pic; //put the file in the res folder.
     private int id;
@@ -34,7 +36,7 @@ public class Sprite {
 //        AffineTransform tx = AffineTransform.getRotateInstance(rotationRequired, locationX, locationY);
 //        AffineTransformOp op = new AffineTransformOp(tx, AffineTransformOp.TYPE_BILINEAR);
         g2.rotate(rotationRequired, loc.x+locationX, loc.y+locationX);
-//        g2.drawImage(op.filter(pic, null), loc.x, loc.y, null);
+//        g2.drawImage(op.filter(pic, null), (int)(loc.x), loc.y, null);
         g2.drawImage(pic, loc.x, loc.y, null);
         g2.rotate(-rotationRequired, loc.x+locationX, loc.y+locationX);
     }
@@ -196,6 +198,10 @@ public class Sprite {
     public void resizeImage(int w, int h){
 //        setPic(getPic().getScaledInstance(w, h, BufferedImage.TYPE_INT_ARGB));
 //               BufferedImage b =  new BufferedImage()
+    }
+
+    public void add(double vy) {
+        loc.y += vy;
     }
 }
 
