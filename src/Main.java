@@ -21,6 +21,11 @@ public class Main extends JPanel {
     private int numReps;
     private ArrayList<Clouds> clouds = new ArrayList<Clouds>();
 
+    static final Rectangle[] buttons = new Rectangle[]{new Rectangle(1000, 450, 200, 100), new Rectangle(300, 100, 120, 120), new Rectangle(300, 300, 120, 120),
+    new Rectangle(600, 100, 120, 120), new Rectangle(600, 300, 120, 120)};
+
+    static Rectangle pointer = new Rectangle(-100, -100, 12, 20);
+
     public static int rocket, glider, payload, sled = 0;
 
     int x = 500, y = 50;
@@ -60,6 +65,7 @@ public class Main extends JPanel {
             }
         });
     }
+    // HA YEESTI
 
     public void controls() {
         if(keys[KeyEvent.VK_A]) {
