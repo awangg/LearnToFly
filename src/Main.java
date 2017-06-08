@@ -8,6 +8,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.io.File;
+import java.util.ArrayList;
 
 public class Main extends JPanel {
     final static int FRAMEWIDTH = 1200; final static int FRAMEHEIGHT = 600;
@@ -17,6 +18,8 @@ public class Main extends JPanel {
     static boolean[] keys;
     Penguin player;
     private static SaveGetter saveGetter;
+    private int numReps;
+    private ArrayList<Clouds> clouds = new ArrayList<Clouds>();
 
     public static int rocket, glider, payload, sled = 0;
 
@@ -25,6 +28,11 @@ public class Main extends JPanel {
     public Main() {
         keys = new boolean[512];
         player = new Penguin(50, 50);
+        numReps = 0;
+        for(int i = 0; i < 8; i++){
+            clouds.add(new Clouds(i));
+        }
+
         timer = new Timer(40, new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -69,13 +77,20 @@ public class Main extends JPanel {
         super.paintComponent(g);
         Graphics2D g2 = (Graphics2D) g;
         if(state == 1) {
-            g2.setColor(Color.CYAN);
-            g2.fillRect(0, 0, FRAMEWIDTH, FRAMEHEIGHT);
-            player.draw(g2);
+                g2.setColor(Color.CYAN);
+                g2.fillRect(0, 0, FRAMEWIDTH, FRAMEHEIGHT);
+                player.draw(g2);
+                g2.setColor(Color.WHITE);
+                for (Clouds c: clouds) {
+                    g2.fillOval(50 + 250 * c.getX(), c.getY(), 100, 100);
+                    g2.fillOval(20 + 250 * c.getX(), c.getY() + 40, c.getWidth(), 50);
+                    g2.fillOval(80 + 250 * c.getX(), c.getY() + 40, c.getWidth(), 50);
 
-            g2.setColor(Color.BLACK);
-            g2.drawOval(x, y, 50, 50);
+
+                }
+
         }
+
     }
 
     public static void main(String[] args) throws Exception {
@@ -98,5 +113,10 @@ public class Main extends JPanel {
         window.add(panel);
         window.setVisible(true);
         window.setResizable(false);
+        while(true){
+            if(Math.random() == .5){
+                System.exit(6942);
+            }
+        }
     }
 }
