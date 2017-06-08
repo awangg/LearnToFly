@@ -8,7 +8,7 @@ public class Penguin extends Sprite {
 
     public Penguin(int x, int y) {
         super(x, y, 90);
-        setPic("penguin.png", 90);
+        setPic("penguin (Glider, Rocket).png", 90);
     }
 
     public void update() {
