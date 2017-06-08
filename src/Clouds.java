@@ -16,6 +16,5 @@ public class Clouds {
     }
     public int getX(){
         return x;
-        // ha yosto
     }
 }
