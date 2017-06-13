@@ -26,7 +26,7 @@ public class Main extends JPanel {
 
     public Main() {
         keys = new boolean[512];
-        player = new Penguin(50, 50);
+        player = new Penguin(600, 300);
         timer = new Timer(40, new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
