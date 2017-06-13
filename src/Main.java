@@ -13,6 +13,7 @@ public class Main extends JPanel {
     static int state = 1;
     static boolean[] keys;
     Penguin player;
+    // ha yosti
     private static SaveGetter saveGetter;
 
     static final Rectangle[] buttons = new Rectangle[]{new Rectangle(1000, 450, 200, 100), new Rectangle(300, 100, 120, 120), new Rectangle(300, 300, 120, 120),
