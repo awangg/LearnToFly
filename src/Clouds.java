@@ -8,6 +8,9 @@ public class Clouds {
         width = (int) (Math.random() * 50 + 100);
         x = ex;
     }
+
+
+
     public int getWidth(){
         return width;
     }

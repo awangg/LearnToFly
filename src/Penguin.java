@@ -5,8 +5,10 @@ public class Penguin extends Sprite {
     double x, y;
     double vy = 1;
     double GRAVITY = 0.1;
-    int speed;
+    int speed = 1;
     boolean rocket;
+
+    int fuel = 100;
 
     public Penguin(int x, int y) {
         super(x, y, 90);
@@ -18,7 +20,15 @@ public class Penguin extends Sprite {
     }
 
     public void update() {
+        System.out.println(rocket);
         if(rocket) {
+            if(fuel > 0 && speed < Main.rocket) {
+                speed += 1;
+                fuel--;
+            }
+            add(-2);
+            GRAVITY = 0.1;
+            vy = 1;
         }else {
             if (getDir() < 90) {
                 vy += GRAVITY;

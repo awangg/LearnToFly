@@ -17,7 +17,7 @@ public class Main extends JPanel {
     private static SaveGetter saveGetter;
 
     static int meters;
-    static int money = 0;
+    static int money = 999;
 
     static int ground = 550;
 
@@ -28,7 +28,7 @@ public class Main extends JPanel {
 
     static int rlevel, glevel, plevel, slevel;
     static int rcost = 100, gcost = 50, pcost = 75, scost = 25;
-    public static int rocket = 0, glider = 10, payload, sled = 0;
+    public static int rocket = 0, glider = 10, payload = 0, sled = 0;
 
     int x = 500, y = 50;
 
@@ -51,28 +51,32 @@ public class Main extends JPanel {
                         rlevel++;
                         money -= rcost;
                         rcost *= 2;
-//                        System.out.println("rocket");
+
+                        rocket += 50;
                     }
                     if(pointer.intersects(buttons[2]) && money > gcost && glevel < 3) {
                         glevel++;
                         money -= gcost;
                         gcost *= 2;
-//                        System.out.println("glider");
+
+                        glider += 10;
                     }
                     if(pointer.intersects(buttons[3]) && money > pcost && plevel < 3) {
                         plevel++;
                         money -= pcost;
                         pcost *= 2;
-//                        System.out.println("payload");
+
+                        payload += 100;
                     }
                     if(pointer.intersects(buttons[4]) && money > scost && slevel < 3) {
                         slevel++;
                         money -= scost;
                         scost *= 2;
-//                        System.out.println("sled");
+
+                        sled += 10;
                     }
                 }else if(state == 1) {
-                    meters++;
+                    meters+=player.getSpeed();
                     player.update();
 
                     if(hitGround()) {
@@ -137,8 +141,10 @@ public class Main extends JPanel {
             player.rotateBy(-5);
         }else if(keys[KeyEvent.VK_ESCAPE]) {
             System.exit(0);
-        }else if(keys[KeyEvent.VK_SPACE]) {
+        }else if(keys[KeyEvent.VK_SPACE] && rlevel > 0) {
             player.rocket = true;
+        }else if(!keys[KeyEvent.VK_SPACE] && rlevel > 0) {
+            player.rocket = false;
         }
     }
 
@@ -149,6 +155,10 @@ public class Main extends JPanel {
             g2.setColor(Color.CYAN);
             g2.fillRect(0, 0, FRAMEWIDTH, FRAMEHEIGHT);
             player.draw(g2);
+
+            g2.setColor(Color.BLACK);
+            g2.drawString("Meters: " + meters, 1050, 50);
+            g2.drawString("Fuel Left: " + player.fuel, 1000, 65);
 
             g2.setColor(Color.WHITE);
             g2.fillRect(0, ground, FRAMEWIDTH, 100);
