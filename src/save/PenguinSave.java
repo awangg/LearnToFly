@@ -5,6 +5,6 @@ package save;
  */
 public class PenguinSave {
 
-    public int level;
+    public int level, rocket, payload, glider, vaseline;
 
 }
