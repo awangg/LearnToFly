@@ -5,47 +5,78 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.io.File;
-import java.util.ArrayList;
 
 public class Main extends JPanel {
     final static int FRAMEWIDTH = 1200; final static int FRAMEHEIGHT = 600;
     Timer timer;
     public static boolean changingPhase = false;
-    static int state = 1;
+    static int state = 2;
     static boolean[] keys;
-    Penguin player;
-    // ha yosti
+    static Penguin player;
     private static SaveGetter saveGetter;
-    private int numReps;
-    private ArrayList<Clouds> clouds = new ArrayList<Clouds>();
+
+    static int meters;
+    static int money = 0;
+
+    static int ground = 550;
 
     static final Rectangle[] buttons = new Rectangle[]{new Rectangle(1000, 450, 200, 100), new Rectangle(300, 100, 120, 120), new Rectangle(300, 300, 120, 120),
     new Rectangle(600, 100, 120, 120), new Rectangle(600, 300, 120, 120)};
 
     static Rectangle pointer = new Rectangle(-100, -100, 12, 20);
 
-    public static int rocket, glider, payload, sled = 0;
+    static int rlevel, glevel, plevel, slevel;
+    static int rcost = 100, gcost = 50, pcost = 75, scost = 25;
+    public static int rocket = 0, glider = 10, payload, sled = 0;
 
     int x = 500, y = 50;
 
     public Main() {
         keys = new boolean[512];
-        player = new Penguin(50, 50);
-        numReps = 0;
-        for(int i = 0; i < 8; i++){
-            clouds.add(new Clouds(i));
-        }
-
+        player = new Penguin(600, 50);
         timer = new Timer(40, new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 controls();
                 if(state == 2) {
                     if(pointer.intersects(buttons[0])) {
+                        if(!(rlevel == 0 && glevel == 0)) {
+                            player.changePicture(rlevel, glevel);
+                        }
+                        meters = 0;
                         state = 1;
                     }
+                    if(pointer.intersects(buttons[1]) && money > rcost && rlevel < 3) {
+                        rlevel++;
+                        money -= rcost;
+                        rcost *= 2;
+//                        System.out.println("rocket");
+                    }
+                    if(pointer.intersects(buttons[2]) && money > gcost && glevel < 3) {
+                        glevel++;
+                        money -= gcost;
+                        gcost *= 2;
+//                        System.out.println("glider");
+                    }
+                    if(pointer.intersects(buttons[3]) && money > pcost && plevel < 3) {
+                        plevel++;
+                        money -= pcost;
+                        pcost *= 2;
+//                        System.out.println("payload");
+                    }
+                    if(pointer.intersects(buttons[4]) && money > scost && slevel < 3) {
+                        slevel++;
+                        money -= scost;
+                        scost *= 2;
+//                        System.out.println("sled");
+                    }
                 }else if(state == 1) {
+                    meters++;
                     player.update();
+
+                    if(hitGround()) {
+                        state = 3;
+                    }
                 }
                 repaint();
             }
@@ -83,7 +114,7 @@ public class Main extends JPanel {
 
             @Override
             public void mouseReleased(MouseEvent e) {
-//                pointer = new Rectangle(-100, -100, 12, 22);
+                pointer = new Rectangle(-100, -100, 12, 22);
             }
 
             @Override
@@ -105,6 +136,8 @@ public class Main extends JPanel {
             player.rotateBy(-5);
         }else if(keys[KeyEvent.VK_ESCAPE]) {
             System.exit(0);
+        }else if(keys[KeyEvent.VK_SPACE]) {
+            player.rocket = true;
         }
     }
 
@@ -112,20 +145,57 @@ public class Main extends JPanel {
         super.paintComponent(g);
         Graphics2D g2 = (Graphics2D) g;
         if(state == 1) {
-                g2.setColor(Color.CYAN);
-                g2.fillRect(0, 0, FRAMEWIDTH, FRAMEHEIGHT);
-                player.draw(g2);
-                g2.setColor(Color.WHITE);
-                for (Clouds c: clouds) {
-                    g2.fillOval(50 + 250 * c.getX(), c.getY(), 100, 100);
-                    g2.fillOval(20 + 250 * c.getX(), c.getY() + 40, c.getWidth(), 50);
-                    g2.fillOval(80 + 250 * c.getX(), c.getY() + 40, c.getWidth(), 50);
+            g2.setColor(Color.CYAN);
+            g2.fillRect(0, 0, FRAMEWIDTH, FRAMEHEIGHT);
+            player.draw(g2);
 
+            g2.setColor(Color.WHITE);
+            g2.fillRect(0, ground, FRAMEWIDTH, 100);
+        }else if(state == 2) {
+            for(int i = 1; i < buttons.length; i++) {
+                Rectangle r = buttons[i];
+                g2.draw(r);
+            }
 
-                }
+            g2.drawString(Integer.toString(rlevel), (int)buttons[1].getX() + 55, (int)(buttons[1].getY() + 30));
+            g2.drawString("Rocket", (int)buttons[1].getX() + 35, (int)(buttons[1].getY() + 55));
+            g2.drawString(Integer.toString(rcost), (int)buttons[1].getX() + xpos(rcost), (int)(buttons[1].getY() + 70));
+
+            g2.drawString(Integer.toString(glevel), (int)buttons[2].getX() + 55, (int)(buttons[2].getY() + 30));
+            g2.drawString("Glider", (int)buttons[2].getX() + 40, (int)(buttons[2].getY() + 55));
+            g2.drawString(Integer.toString(gcost), (int)buttons[2].getX() + xpos(gcost), (int)(buttons[2].getY() + 70));
+
+            g2.drawString(Integer.toString(plevel), (int)buttons[3].getX() + 55, (int)(buttons[3].getY() + 30));
+            g2.drawString("Payload", (int)buttons[3].getX() + 35, (int)(buttons[3].getY() + 55));
+            g2.drawString(Integer.toString(pcost), (int)buttons[3].getX() + xpos(pcost), (int)(buttons[3].getY() + 70));
+
+            g2.drawString(Integer.toString(slevel), (int)buttons[4].getX() + 55, (int)(buttons[4].getY() + 30));
+            g2.drawString("Vaseline", (int)buttons[4].getX() + 35, (int)(buttons[4].getY() + 55));
+            g2.drawString(Integer.toString(scost), (int)buttons[4].getX() + xpos(scost), (int)(buttons[4].getY() + 70));
+
+            g2.setColor(Color.GREEN);
+            g2.fill(buttons[0]);
+
+            g2.setColor(Color.BLACK);
+            g2.drawString("Money: " + money, 1050, 50);
+        }else if(state == 3) {
 
         }
+    }
 
+    static boolean hitGround() {
+        if(player.getBoundingRectangle().intersects(new Rectangle(0, ground, FRAMEWIDTH, 600 - ground))) {
+            return true;
+        }
+        return false;
+    }
+
+    static int xpos(int cost) {
+        if(cost < 100) {
+            return 50;
+        }else {
+            return 45;
+        }
     }
 
     public static void main(String[] args) throws Exception {
@@ -148,10 +218,5 @@ public class Main extends JPanel {
         window.add(panel);
         window.setVisible(true);
         window.setResizable(false);
-        while(true){
-            if(Math.random() == .5){
-                System.exit(6942);
-            }
-        }
     }
 }
