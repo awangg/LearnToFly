@@ -1,3 +1,5 @@
+package src;
+
 import save.CreateSave;
 import save.PenguinSave;
 import save.SaveGetter;
@@ -210,16 +212,16 @@ public class Main extends JPanel {
     }
 
     public static void main(String[] args) throws Exception {
-        saveGetter = new SaveGetter();
-        CreateSave cs = new CreateSave();
-        File save = new File(System.getProperty("user.home") + "/learntofly/penguin.yml");
-        if(!save.exists())
-            cs.create();
-        PenguinSave ps = saveGetter.getPenguin();
-        rocket = ps.rocket;
-        glider = ps.glider;
-        payload = ps.payload;
-        sled = ps.vaseline;
+//        saveGetter = new SaveGetter();
+//        CreateSave cs = new CreateSave();
+//        File save = new File(System.getProperty("user.home") + "/learntofly/penguin.yml");
+//        if(!save.exists())
+//            cs.create();
+//        PenguinSave ps = saveGetter.getPenguin();
+//        rocket = ps.rocket;
+//        glider = ps.glider;
+//        payload = ps.payload;
+//        sled = ps.vaseline;
 
         JFrame window = new JFrame("Learn To Fly!");
         window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
