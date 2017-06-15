@@ -1,6 +1,5 @@
-/**
- * Created by daniel_nee on 6/7/17.
- */
+package src;
+
 public class Clouds {
     int width, Y, x;
     public Clouds(int ex){

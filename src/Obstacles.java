@@ -1,3 +1,4 @@
+package src;
 
 public class Obstacles extends Sprite {
     double health;

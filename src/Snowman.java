@@ -1,3 +1,4 @@
+package src;
 
 public class Snowman extends Obstacles {
     public Snowman(int x, int y, int dir, int h) {

@@ -1,3 +1,5 @@
+package src; 
+
 //import save.CreateSave;
 //import save.PenguinSave;
 //import save.SaveGetter;
@@ -21,7 +23,7 @@ public class Main extends JPanel {
     
     boolean cont1, cont2 = false;
 
-    static int meters;
+    static double meters;
     static int money = 999;
 
     static int ground = 550;
@@ -33,7 +35,8 @@ public class Main extends JPanel {
 
     static int rlevel, glevel, plevel, slevel;
     static int rcost = 100, gcost = 50, pcost = 75, scost = 25;
-    public static int rocket = 0, glider = 10, payload = 0, sled = 0;
+    public static int payload = 0, sled = 0;
+    public static double glider = 0.1, rocket = 0;
     
     public static boolean gameStart = false;
     
@@ -52,13 +55,13 @@ public class Main extends JPanel {
             public void actionPerformed(ActionEvent e) {
                 controls();
                 if(state == 1) {
-                    meters+=player.getSpeed();
                     player.update();
-
+                    gameStart = false;
+                    
+                    meters+=player.getSpeed();
                     if(hitGround()) {
                         state = 3;
                     }
-                    gameStart = false;
                 }
                 repaint();
             }
@@ -105,14 +108,14 @@ public class Main extends JPanel {
                         money -= rcost;
                         rcost *= 2;
 
-                        rocket += 50;
+                        rocket += 0.1;
                     }
                     if(pointer.intersects(buttons[2]) && money > gcost && glevel < 3) {
                         glevel++;
                         money -= gcost;
                         gcost *= 2;
 
-                        glider += 6;
+                        glider += 0.23;
                     }
                     if(pointer.intersects(buttons[3]) && money > pcost && plevel < 3) {
                         plevel++;
@@ -188,8 +191,12 @@ public class Main extends JPanel {
             player.draw(g2);
 
             g2.setColor(Color.BLACK);
-            g2.drawString("Meters: " + meters, 1050, 50);
-            g2.drawString("Fuel Left: " + player.fuel, 1000, 65);
+            g2.drawString("Meters: " + (int)meters, 1050, 50);
+            if(player.fuel < 0) {
+            	g2.drawString("Fuel: EMPTY", 1000, 65);
+            }else {
+            	g2.drawString("Fuel Left: " + player.fuel, 1000, 65);
+            }
 
             g2.setColor(Color.WHITE);
             g2.fillRect(0, ground, FRAMEWIDTH, 100);

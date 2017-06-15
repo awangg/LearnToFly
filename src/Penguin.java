@@ -1,64 +1,76 @@
+package src;
+
 import java.awt.Point;
-import java.awt.geom.Point2D;
 
 public class Penguin extends Sprite {
     double x, y;
-    double vy = 1;
+    double vy = 5;
     double GRAVITY = 0.1;
-    int speed = 1;
+    double speed = 0.25;
     boolean rocket;
+    double g, r;
     
-    int r, g, p, s;
-
     int fuel = 100;
 
     public Penguin(int x, int y) {
         super(x, y, 90);
         setPic("penguin (Glider, Rocket).png", 90);
     }
+    
+    public void update() {
+    	if(Main.gameStart) {
+    		r = Main.rocket;
+    		g = Main.glider;
+    	}
+    	Point loc = getLoc();
+    	if(getDir() < 90) {
+    		if(rocket && fuel >= 0) {
+    			vy = r;
+    			if(speed < 10*r) {
+    				speed += r;
+    			}
+    			fuel--;
+    		}else {
+    			vy += GRAVITY;
+    			GRAVITY += 0.1;
+    		}
+    		Main.changingPhase = true;
+    	}else if(getDir() > 90) {
+    		if(rocket && fuel >= 0) {
+    			vy = -r;
+    			if(speed < 10*r) {
+    				speed += r;
+    			}
+    			fuel--;
+    		}else {
+    			vy -= GRAVITY;
+    			GRAVITY -= 0.1;
+    		}
+    	}else if(getDir() == 90) {
+    		if(rocket && fuel >= 0) {
+    			vy = 0;
+    			if(speed < 10*r) {
+    				speed += r;
+    			}
+    			fuel--;
+    		}else {
+	    		if(Main.changingPhase) {
+	    			vy -= g * vy;
+	    			if(g >= 5) g -= 5;
+	    			Main.changingPhase = false;
+	    		}
+    		}
+    		GRAVITY = 0.1;
+    		vy += GRAVITY;
+    	}
+    	loc.y += vy;
+    }
 
     public void changePicture(int r, int c) {
         setPic(r + "," + c + ".png", 90);
     }
 
-    public void update() {
-    	if(Main.gameStart) {
-    		r = Main.rocket;
-    		g = Main.glider;
-    		p = Main.payload;
-    		s = Main.sled;
-    	}
-        if(rocket) {
-            if(fuel > 0 && speed < r) {
-                speed += 1;
-                fuel--;
-            }
-            add(-2);
-            GRAVITY = 0.1;
-            vy = 1;
-        }else {
-            if (getDir() < 90) {
-                vy += GRAVITY;
-                GRAVITY += 0.01;
-                Main.changingPhase = true;
-            } else if (getDir() > 90) {
-                vy -= GRAVITY;
-                GRAVITY -= 0.1;
-            } else if (getDir() == 90) {
-                if (Main.changingPhase) {
-                    vy -= g;
-                    if(g-2 > 0) {
-                    	g-=4;
-                    }
-                    Main.changingPhase = false;
-                }
-                GRAVITY = 0.1;
-            }
-            add(vy);
-        }
-    }
-
-    public int getSpeed() {
+    public double getSpeed() {
         return speed;
     }
 }
