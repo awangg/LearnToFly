@@ -19,6 +19,9 @@ public class Main extends JPanel {
     private static SaveGetter saveGetter;
     
     Animation start = new Animation();
+    int opaq = 0;
+    
+    boolean cont1, cont2 = false;
 
     static int meters;
     static int money = 999;
@@ -149,7 +152,7 @@ public class Main extends JPanel {
     
     public void initAnimation() {
     	part1 = new Sprite(350, 0, 90);
-        part2 = new Sprite(559, 0, 90);
+        part2 = new Sprite(659, 0, 90);
         studio = new Sprite(0, 0, 90);
         part1.setPic("Part1.png", 90);
         part2.setPic("Part2.png", 90);
@@ -215,7 +218,32 @@ public class Main extends JPanel {
         	g2.setColor(Color.RED);
         	g2.fillRect(0, 0, FRAMEWIDTH, FRAMEHEIGHT);
         }else if(state == 5) {
-        	start.play(g2);
+    		studio.draw(g2);
+        	part1.draw(g2);
+    		part2.draw(g2);
+    		
+    		if(part1.getLoc().x > 0) {
+    			part1.getLoc().x-=3;
+    		}else {
+    			cont1 = true;
+    		}
+    		if(part2.getLoc().x < 900) {
+    			part2.getLoc().x+=2;
+    		}else {
+    			cont2 = true;
+    		}
+    		
+    		g2.setColor(new Color(0, 0, 0, opaq));
+    		if(cont1 && cont2) {
+    			if(opaq + 4 <= 252) {
+    				opaq+=4;
+    			}
+    			g2.setColor(new Color(0, 0, 0, opaq));
+    		}
+    		g2.fillRect(0, 0, FRAMEWIDTH, FRAMEHEIGHT);
+    		if(opaq >= 252) {
+    			state = 2;
+    		}
         }
     }
 

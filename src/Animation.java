@@ -11,8 +11,8 @@ public class Animation {
 	Timer t;
 	
 	public void play(Graphics2D g2) {
-		g2.setColor(Color.RED);
-		g2.fillRect(0, 0, Main.FRAMEWIDTH, Main.FRAMEHEIGHT);
+//		g2.setColor(Color.RED);
+//		g2.fillRect(0, 0, Main.FRAMEWIDTH, Main.FRAMEHEIGHT);
 		t = new Timer(50, new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
