@@ -1,24 +1,22 @@
-package src;
-
-import save.CreateSave;
-import save.PenguinSave;
-import save.SaveGetter;
+//import save.CreateSave;
+//import save.PenguinSave;
+//import save.SaveGetter;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
+import java.awt.image.BufferedImage;
 import java.io.File;
+import javax.imageio.*;
 
 public class Main extends JPanel {
     final static int FRAMEWIDTH = 1200; final static int FRAMEHEIGHT = 600;
     Timer timer;
     public static boolean changingPhase = false;
-    static int state = 5;
+    static int state = 2;
     static boolean[] keys;
     static Penguin player;
-    private static SaveGetter saveGetter;
-    
-    Animation start = new Animation();
+//    private static SaveGetter saveGetter;
     int opaq = 0;
     
     boolean cont1, cont2 = false;
@@ -53,44 +51,7 @@ public class Main extends JPanel {
             @Override
             public void actionPerformed(ActionEvent e) {
                 controls();
-                if(state == 2) {
-                    if(pointer.intersects(buttons[0])) {
-                        if(!(rlevel == 0 && glevel == 0)) {
-                            player.changePicture(glevel, rlevel);
-                        }
-                        meters = 0;
-                        gameStart = true;
-                        state = 1;
-                    }
-                    if(pointer.intersects(buttons[1]) && money > rcost && rlevel < 3) {
-                        rlevel++;
-                        money -= rcost;
-                        rcost *= 2;
-
-                        rocket += 50;
-                    }
-                    if(pointer.intersects(buttons[2]) && money > gcost && glevel < 3) {
-                        glevel++;
-                        money -= gcost;
-                        gcost *= 2;
-
-                        glider += 6;
-                    }
-                    if(pointer.intersects(buttons[3]) && money > pcost && plevel < 3) {
-                        plevel++;
-                        money -= pcost;
-                        pcost *= 2;
-
-                        payload += 100;
-                    }
-                    if(pointer.intersects(buttons[4]) && money > scost && slevel < 3) {
-                        slevel++;
-                        money -= scost;
-                        scost *= 2;
-
-                        sled += 10;
-                    }
-                }else if(state == 1) {
+                if(state == 1) {
                     meters+=player.getSpeed();
                     player.update();
 
@@ -130,22 +91,67 @@ public class Main extends JPanel {
             @Override
             public void mousePressed(MouseEvent e) {
 //                System.out.println("yeet");
-                pointer = new Rectangle(e.getX(), e.getY(), 12, 16);
+                if(state == 2) {
+                    if(pointer.intersects(buttons[0])) {
+                        if(!(rlevel == 0 && glevel == 0)) {
+                            player.changePicture(glevel, rlevel);
+                        }
+                        meters = 0;
+                        gameStart = true;
+                        state = 1;
+                    }
+                    if(pointer.intersects(buttons[1]) && money > rcost && rlevel < 3) {
+                        rlevel++;
+                        money -= rcost;
+                        rcost *= 2;
+
+                        rocket += 50;
+                    }
+                    if(pointer.intersects(buttons[2]) && money > gcost && glevel < 3) {
+                        glevel++;
+                        money -= gcost;
+                        gcost *= 2;
+
+                        glider += 6;
+                    }
+                    if(pointer.intersects(buttons[3]) && money > pcost && plevel < 3) {
+                        plevel++;
+                        money -= pcost;
+                        pcost *= 2;
+
+                        payload += 100;
+                    }
+                    if(pointer.intersects(buttons[4]) && money > scost && slevel < 3) {
+                        slevel++;
+                        money -= scost;
+                        scost *= 2;
+
+                        sled += 10;
+                    }
+                }
             }
 
             @Override
             public void mouseReleased(MouseEvent e) {
-                pointer = new Rectangle(-100, -100, 12, 22);
             }
 
             @Override
             public void mouseEntered(MouseEvent e) {
-
             }
 
             @Override
             public void mouseExited(MouseEvent e) {
+            }
+        });
 
+        addMouseMotionListener(new MouseMotionListener() {
+            @Override
+            public void mouseDragged(MouseEvent e) {
+            }
+
+            @Override
+            public void mouseMoved(MouseEvent e) {
+                pointer = new Rectangle(e.getX(), e.getY(), 12, 16);
             }
         });
     }
@@ -188,11 +194,46 @@ public class Main extends JPanel {
             g2.setColor(Color.WHITE);
             g2.fillRect(0, ground, FRAMEWIDTH, 100);
         }else if(state == 2) {
+            try {
+                g2.drawImage(ImageIO.read(new File("res/sky.jpg")), 0, 0, FRAMEWIDTH, FRAMEHEIGHT, null);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            if(pointer.intersects(buttons[1]) && money > rcost && rlevel < 3) {
+                g2.setColor(Color.GREEN);
+                g2.fill(buttons[1]);
+            }else if(pointer.intersects(buttons[1]) && (money < rcost || rlevel >= 3)) {
+                g2.setColor(Color.RED);
+                g2.fill(buttons[1]);
+            }else if(pointer.intersects(buttons[2]) && money > gcost && glevel < 3) {
+                g2.setColor(Color.GREEN);
+                g2.fill(buttons[2]);
+            }else if(pointer.intersects(buttons[2]) && (money < gcost || glevel >= 3)) {
+                g2.setColor(Color.RED);
+                g2.fill(buttons[2]);
+            }else if(pointer.intersects(buttons[3]) && money > pcost && plevel < 3) {
+                g2.setColor(Color.GREEN);
+                g2.fill(buttons[3]);
+            }else if(pointer.intersects(buttons[3]) && (money < pcost || plevel >= 3)) {
+                g2.setColor(Color.RED);
+                g2.fill(buttons[3]);
+            }else if(pointer.intersects(buttons[4]) && money > scost && slevel < 3) {
+                g2.setColor(Color.GREEN);
+                g2.fill(buttons[4]);
+            }else if(pointer.intersects(buttons[4]) && (money < scost || slevel >= 3)) {
+                g2.setColor(Color.RED);
+                g2.fill(buttons[4]);
+            }
+
+            g2.setColor(Color.BLACK);
             for(int i = 1; i < buttons.length; i++) {
                 Rectangle r = buttons[i];
                 g2.draw(r);
             }
 
+
+            g2.setColor(Color.BLACK);
+            g2.setFont(new Font("Comic Sans MS", Font.PLAIN, 24));
             g2.drawString(Integer.toString(rlevel), (int)buttons[1].getX() + 55, (int)(buttons[1].getY() + 30));
             g2.drawString("Rocket", (int)buttons[1].getX() + 35, (int)(buttons[1].getY() + 55));
             g2.drawString(Integer.toString(rcost), (int)buttons[1].getX() + xpos(rcost), (int)(buttons[1].getY() + 70));
@@ -209,8 +250,13 @@ public class Main extends JPanel {
             g2.drawString("Vaseline", (int)buttons[4].getX() + 35, (int)(buttons[4].getY() + 55));
             g2.drawString(Integer.toString(scost), (int)buttons[4].getX() + xpos(scost), (int)(buttons[4].getY() + 70));
 
-            g2.setColor(Color.GREEN);
-            g2.fill(buttons[0]);
+            if(pointer.intersects(buttons[0])) {
+                g2.setColor(Color.GREEN);
+                g2.fill(buttons[0]);
+            }else {
+                g2.setColor(Color.BLACK);
+                g2.draw(buttons[0]);
+            }
 
             g2.setColor(Color.BLACK);
             g2.drawString("Money: " + money, 1050, 50);
