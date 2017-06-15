@@ -10,6 +10,7 @@ import java.awt.event.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import javax.imageio.*;
+import java.util.ArrayList;
 
 public class Main extends JPanel {
     final static int FRAMEWIDTH = 1200; final static int FRAMEHEIGHT = 600;
@@ -43,12 +44,18 @@ public class Main extends JPanel {
     public static Sprite part1, part2, studio;
 
     int x = 500, y = 50;
+    
+    ArrayList<Clouds> clouds = new ArrayList<>();
 
     public Main() {
         keys = new boolean[512];
         player = new Penguin(600, 50);
         
         initAnimation();
+        
+        for(int i = 0; i < 8; i++) {
+        	clouds.add(new Clouds(i));
+        }
         
         timer = new Timer(40, new ActionListener() {
             @Override
@@ -57,6 +64,10 @@ public class Main extends JPanel {
                 if(state == 1) {
                     player.update();
                     gameStart = false;
+                    
+                    for(Clouds c : clouds) {
+                    	c.move();
+                    }
                     
                     meters+=player.getSpeed();
                     if(hitGround()) {
@@ -188,7 +199,6 @@ public class Main extends JPanel {
         if(state == 1) {
             g2.setColor(Color.CYAN);
             g2.fillRect(0, 0, FRAMEWIDTH, FRAMEHEIGHT);
-            player.draw(g2);
 
             g2.setColor(Color.BLACK);
             g2.drawString("Meters: " + (int)meters, 1050, 50);
@@ -197,9 +207,15 @@ public class Main extends JPanel {
             }else {
             	g2.drawString("Fuel Left: " + player.fuel, 1000, 65);
             }
-
+            
+            for(Clouds c : clouds) {
+            	c.draw(g2);
+            }
+            
             g2.setColor(Color.WHITE);
             g2.fillRect(0, ground, FRAMEWIDTH, 100);
+            
+            player.draw(g2);
         }else if(state == 2) {
             try {
                 g2.drawImage(ImageIO.read(new File("res/sky.jpg")), 0, 0, FRAMEWIDTH, FRAMEHEIGHT, null);

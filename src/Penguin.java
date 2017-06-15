@@ -25,12 +25,13 @@ public class Penguin extends Sprite {
     	Point loc = getLoc();
     	if(getDir() < 90) {
     		if(rocket && fuel >= 0) {
-    			vy = r;
+    			vy = r * 10;
     			if(speed < 10*r) {
     				speed += r;
     			}
     			fuel--;
     		}else {
+    			speed = 0.25;
     			vy += GRAVITY;
     			GRAVITY += 0.1;
     		}
@@ -43,6 +44,7 @@ public class Penguin extends Sprite {
     			}
     			fuel--;
     		}else {
+    			speed = 0.25;
     			vy -= GRAVITY;
     			GRAVITY -= 0.1;
     		}
@@ -54,6 +56,7 @@ public class Penguin extends Sprite {
     			}
     			fuel--;
     		}else {
+    			speed = 0.25;
 	    		if(Main.changingPhase) {
 	    			vy -= g * vy;
 	    			if(g >= 5) g -= 5;
