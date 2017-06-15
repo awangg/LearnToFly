@@ -9,6 +9,8 @@ public class Penguin extends Sprite {
     double GRAVITY = 0.1;
     int speed = 1;
     boolean rocket;
+    
+    int r, g, p, s;
 
     int fuel = 100;
 
@@ -22,9 +24,14 @@ public class Penguin extends Sprite {
     }
 
     public void update() {
-        System.out.println(rocket);
+    	if(Main.gameStart) {
+    		r = Main.rocket;
+    		g = Main.glider;
+    		p = Main.payload;
+    		s = Main.sled;
+    	}
         if(rocket) {
-            if(fuel > 0 && speed < Main.rocket) {
+            if(fuel > 0 && speed < r) {
                 speed += 1;
                 fuel--;
             }
@@ -41,7 +48,10 @@ public class Penguin extends Sprite {
                 GRAVITY -= 0.1;
             } else if (getDir() == 90) {
                 if (Main.changingPhase) {
-                    vy -= Main.glider;
+                    vy -= g;
+                    if(g-2 > 0) {
+                    	g-=4;
+                    }
                     Main.changingPhase = false;
                 }
                 GRAVITY = 0.1;

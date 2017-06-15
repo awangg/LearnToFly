@@ -13,10 +13,12 @@ public class Main extends JPanel {
     final static int FRAMEWIDTH = 1200; final static int FRAMEHEIGHT = 600;
     Timer timer;
     public static boolean changingPhase = false;
-    static int state = 2;
+    static int state = 5;
     static boolean[] keys;
     static Penguin player;
     private static SaveGetter saveGetter;
+    
+    Animation start = new Animation();
 
     static int meters;
     static int money = 999;
@@ -31,12 +33,19 @@ public class Main extends JPanel {
     static int rlevel, glevel, plevel, slevel;
     static int rcost = 100, gcost = 50, pcost = 75, scost = 25;
     public static int rocket = 0, glider = 10, payload = 0, sled = 0;
+    
+    public static boolean gameStart = false;
+    
+    public static Sprite part1, part2, studio;
 
     int x = 500, y = 50;
 
     public Main() {
         keys = new boolean[512];
         player = new Penguin(600, 50);
+        
+        initAnimation();
+        
         timer = new Timer(40, new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -44,9 +53,10 @@ public class Main extends JPanel {
                 if(state == 2) {
                     if(pointer.intersects(buttons[0])) {
                         if(!(rlevel == 0 && glevel == 0)) {
-                            player.changePicture(rlevel, glevel);
+                            player.changePicture(glevel, rlevel);
                         }
                         meters = 0;
+                        gameStart = true;
                         state = 1;
                     }
                     if(pointer.intersects(buttons[1]) && money > rcost && rlevel < 3) {
@@ -61,7 +71,7 @@ public class Main extends JPanel {
                         money -= gcost;
                         gcost *= 2;
 
-                        glider += 10;
+                        glider += 6;
                     }
                     if(pointer.intersects(buttons[3]) && money > pcost && plevel < 3) {
                         plevel++;
@@ -84,6 +94,7 @@ public class Main extends JPanel {
                     if(hitGround()) {
                         state = 3;
                     }
+                    gameStart = false;
                 }
                 repaint();
             }
@@ -134,6 +145,15 @@ public class Main extends JPanel {
 
             }
         });
+    }
+    
+    public void initAnimation() {
+    	part1 = new Sprite(350, 0, 90);
+        part2 = new Sprite(559, 0, 90);
+        studio = new Sprite(0, 0, 90);
+        part1.setPic("Part1.png", 90);
+        part2.setPic("Part2.png", 90);
+        studio.setPic("Studio.png", 90);
     }
 
     public void controls() {
@@ -192,7 +212,10 @@ public class Main extends JPanel {
             g2.setColor(Color.BLACK);
             g2.drawString("Money: " + money, 1050, 50);
         }else if(state == 3) {
-
+        	g2.setColor(Color.RED);
+        	g2.fillRect(0, 0, FRAMEWIDTH, FRAMEHEIGHT);
+        }else if(state == 5) {
+        	start.play(g2);
         }
     }
 
