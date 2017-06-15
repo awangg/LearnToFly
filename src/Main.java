@@ -22,10 +22,11 @@ public class Main extends JPanel {
 //    private static SaveGetter saveGetter;
     int opaq = 0;
     
-    boolean cont1, cont2 = false;
+    boolean cont1, cont2, cont3, cont4;
+    Ramp r = new Ramp();
 
     static double meters;
-    static int money = 999;
+    static int money = 99999;
 
     static int ground = 550;
 
@@ -36,20 +37,18 @@ public class Main extends JPanel {
 
     static int rlevel, glevel, plevel, slevel;
     static int rcost = 100, gcost = 50, pcost = 75, scost = 25;
-    public static int payload = 0, sled = 0;
+    public static int payload = 0, sled = 10;
     public static double glider = 0.1, rocket = 0;
     
     public static boolean gameStart = false;
     
     public static Sprite part1, part2, studio;
-
-    int x = 500, y = 50;
     
     ArrayList<Clouds> clouds = new ArrayList<>();
 
     public Main() {
         keys = new boolean[512];
-        player = new Penguin(600, 50);
+        player = new Penguin(50, 150);
         
         initAnimation();
         
@@ -62,12 +61,12 @@ public class Main extends JPanel {
             public void actionPerformed(ActionEvent e) {
                 controls();
                 if(state == 1) {
-                    player.update();
+            		player.update();
                     gameStart = false;
-                    
                     for(Clouds c : clouds) {
                     	c.move();
                     }
+                    r.move();
                     
                     meters+=player.getSpeed();
                     if(hitGround()) {
@@ -112,7 +111,7 @@ public class Main extends JPanel {
                         }
                         meters = 0;
                         gameStart = true;
-                        state = 1;
+                        state = 0;
                     }
                     if(pointer.intersects(buttons[1]) && money > rcost && rlevel < 3) {
                         rlevel++;
@@ -120,6 +119,7 @@ public class Main extends JPanel {
                         rcost *= 2;
 
                         rocket += 0.1;
+                        player.fuel += 100;
                     }
                     if(pointer.intersects(buttons[2]) && money > gcost && glevel < 3) {
                         glevel++;
@@ -196,7 +196,7 @@ public class Main extends JPanel {
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
         Graphics2D g2 = (Graphics2D) g;
-        if(state == 1) {
+        if(state == 0) {
             g2.setColor(Color.CYAN);
             g2.fillRect(0, 0, FRAMEWIDTH, FRAMEHEIGHT);
 
@@ -215,6 +215,44 @@ public class Main extends JPanel {
             g2.setColor(Color.WHITE);
             g2.fillRect(0, ground, FRAMEWIDTH, 100);
             
+//            System.out.println(player.getLoc().x);
+            
+        	if(player.getLoc().x <= 294) {
+        		player.getLoc().x+=4;
+        	}else {
+        		cont3 = true;
+        	}
+        	if(player.getLoc().x < 320 && player.getLoc().x >= 298) {
+        		player.getLoc().x++;
+        		player.getLoc().y-=sled;
+        	}else {
+        		cont4 = true;
+        	}
+        	if(cont3 && cont4) {
+        		state++;
+        	}
+        	r.draw(g2);
+        	player.draw(g2);
+        }else if(state == 1) {
+        	g2.setColor(Color.CYAN);
+            g2.fillRect(0, 0, FRAMEWIDTH, FRAMEHEIGHT);
+
+            g2.setColor(Color.BLACK);
+            g2.drawString("Meters: " + (int)meters, 1050, 50);
+            if(player.fuel < 0) {
+            	g2.drawString("Fuel: EMPTY", 1000, 65);
+            }else {
+            	g2.drawString("Fuel Left: " + player.fuel, 1000, 65);
+            }
+            
+            for(Clouds c : clouds) {
+            	c.draw(g2);
+            }
+            
+            g2.setColor(Color.WHITE);
+            g2.fillRect(0, ground, FRAMEWIDTH, 100);
+            
+            r.draw(g2);
             player.draw(g2);
         }else if(state == 2) {
             try {

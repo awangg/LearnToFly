@@ -30,8 +30,9 @@ public class Penguin extends Sprite {
     				speed += r;
     			}
     			fuel--;
+    		    GRAVITY = 0.1;
     		}else {
-    			speed = 0.25;
+    			speed+=0.05;
     			vy += GRAVITY;
     			GRAVITY += 0.1;
     		}
@@ -43,8 +44,11 @@ public class Penguin extends Sprite {
     				speed += r;
     			}
     			fuel--;
+    		    GRAVITY = 0.1;
     		}else {
-    			speed = 0.25;
+    			if(speed > 0.11) {
+    				speed-=0.1;
+    			}
     			vy -= GRAVITY;
     			GRAVITY -= 0.1;
     		}
@@ -55,8 +59,8 @@ public class Penguin extends Sprite {
     				speed += r;
     			}
     			fuel--;
+    		    GRAVITY = 0.1;
     		}else {
-    			speed = 0.25;
 	    		if(Main.changingPhase) {
 	    			vy -= g * vy;
 	    			if(g >= 5) g -= 5;

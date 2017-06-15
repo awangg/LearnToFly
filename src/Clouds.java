@@ -25,7 +25,7 @@ public class Clouds {
     
     public void move() {
     	for(int i = 0; i < component.length; i++) {
-			component[i] -= Main.player.getSpeed() * 8;
+			component[i] -= Main.player.getSpeed() * 100;
 			if(component[i] <= 0) {
 				component[i] = 1200;
 			}
