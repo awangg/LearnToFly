@@ -1,8 +1,11 @@
-package src;
 
 //import save.CreateSave;
 //import save.PenguinSave;
 //import save.SaveGetter;
+
+import save.CreateSave;
+import save.PenguinSave;
+import save.SaveGetter;
 
 import javax.swing.*;
 import java.awt.*;
@@ -19,7 +22,9 @@ public class Main extends JPanel {
 	static int state = 2;
 	static boolean[] keys;
 	static Penguin player;
-	// private static SaveGetter saveGetter;
+	private static SaveGetter saveGetter;
+	private static CreateSave cs;
+	private static PenguinSave ps;
 	int opaq = 0;
 
 	boolean cont1, cont2, cont3, cont4;
@@ -28,7 +33,7 @@ public class Main extends JPanel {
 	int maxDistance = 0;
 
 	static double meters;
-	static int money = 0;
+	static int money;
 
 	static int ground = 550;
 
@@ -42,8 +47,8 @@ public class Main extends JPanel {
 
 	static int rlevel, glevel, plevel, slevel;
 	static int rcost = 10, gcost = 5, pcost = 7, scost = 2;
-	public static int payload = 0, sled = 10;
-	public static double glider = 0.1, rocket = 0;
+	public static int payload, sled;
+	public static double glider, rocket;
 
 	public static boolean gameStart = false;
 
@@ -425,17 +430,18 @@ public class Main extends JPanel {
 	}
 
 	public static void main(String[] args) throws Exception {
-		// saveGetter = new SaveGetter();
-		// CreateSave cs = new CreateSave();
-		// File save = new File(System.getProperty("user.home") +
-		// "/learntofly/penguin.yml");
-		// if(!save.exists())
-		// cs.create();
-		// PenguinSave ps = saveGetter.getPenguin();
-		// rocket = ps.rocket;
-		// glider = ps.glider;
-		// payload = ps.payload;
-		// sled = ps.vaseline;
+         saveGetter = new SaveGetter();
+         cs = new CreateSave();
+         File save = new File(System.getProperty("user.home") +
+         "/learntofly/penguin.yml");
+         if(!save.exists())
+         cs.create(1,0.1,1,1, 0);
+         ps = saveGetter.getPenguin();
+         rocket = ps.rocket;
+         glider = ps.glider;
+         payload = ps.payload;
+         sled = ps.vaseline;
+         money = ps.money;
 
 		JFrame window = new JFrame("Learn To Fly!");
 		window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -452,5 +458,12 @@ public class Main extends JPanel {
 		window.add(panel);
 		window.setVisible(true);
 		window.setResizable(false);
+
+        Runtime.getRuntime().addShutdownHook(new Thread() {
+            @Override
+            public void run() {
+                cs.create(rocket, glider, payload, sled, money);
+            }
+        });
 	}
 }
