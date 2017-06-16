@@ -10,7 +10,7 @@ public class Penguin extends Sprite {
     boolean rocket;
     double g, r;
     
-    int fuel = 100;
+    int fuel = 20;
 
     public Penguin(int x, int y) {
         super(x, y, 90);
@@ -25,7 +25,7 @@ public class Penguin extends Sprite {
     	Point loc = getLoc();
     	if(getDir() < 90) {
     		if(rocket && fuel >= 0) {
-    			vy = r * 10;
+    			vy = r * 50;
     			if(speed < 10*r) {
     				speed += r;
     			}
@@ -39,7 +39,7 @@ public class Penguin extends Sprite {
     		Main.changingPhase = true;
     	}else if(getDir() > 90) {
     		if(rocket && fuel >= 0) {
-    			vy = -r;
+    			vy = -r * 50;
     			if(speed < 10*r) {
     				speed += r;
     			}
