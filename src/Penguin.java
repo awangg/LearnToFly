@@ -8,6 +8,7 @@ public class Penguin extends Sprite {
     double g, r;
     
     int fuel = 20;
+	// asdlf
 
     public Penguin(int x, int y) {
         super(x, y, 90);
