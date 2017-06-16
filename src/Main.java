@@ -1,5 +1,3 @@
-package src;
-
 //import save.CreateSave;
 //import save.PenguinSave;
 //import save.SaveGetter;
@@ -22,6 +20,8 @@ public class Main extends JPanel {
 	// private static SaveGetter saveGetter;
 	int opaq = 0;
 
+    boolean loadscreen = true;
+
 	boolean cont1, cont2, cont3, cont4;
 	Ramp r = new Ramp();
 
@@ -29,6 +29,7 @@ public class Main extends JPanel {
 
 	static double meters;
 	static int money = 0;
+    int fuel = 20;
 
 	static int ground = 550;
 
@@ -43,7 +44,7 @@ public class Main extends JPanel {
 	static int rlevel, glevel, plevel, slevel;
 	static int rcost = 10, gcost = 5, pcost = 7, scost = 2;
 	public static int payload = 0, sled = 10;
-	public static double glider = 0.1, rocket = 0;
+	public static double glider = 0.7, rocket = 0;
 
 	public static boolean gameStart = false;
 
@@ -119,32 +120,32 @@ public class Main extends JPanel {
 						gameStart = true;
 						state = 0;
 					}
-					if (pointer.intersects(buttons[1]) && money >= rcost && rlevel < 3) {
+					if (pointer.intersects(buttons[1]) && money >= rcost && rlevel < 5) {
 						rlevel++;
 						money -= rcost;
-						rcost *= 4;
+						rcost *= 10;
 
 						rocket += 0.1;
-						player.fuel *= 2;
+                        fuel *= 2;
 					}
-					if (pointer.intersects(buttons[2]) && money >= gcost && glevel < 3) {
+					if (pointer.intersects(buttons[2]) && money >= gcost && glevel < 5) {
 						glevel++;
 						money -= gcost;
-						gcost *= 4;
+						gcost *= 10;
 
-						glider += 0.23;
+						glider += 0.15;
 					}
-					if (pointer.intersects(buttons[3]) && money >= pcost && plevel < 3) {
+					if (pointer.intersects(buttons[3]) && money >= pcost && plevel < 5) {
 						plevel++;
 						money -= pcost;
-						pcost *= 4;
+						pcost *= 10;
 
 						payload += 100;
 					}
-					if (pointer.intersects(buttons[4]) && money >= scost && slevel < 3) {
+					if (pointer.intersects(buttons[4]) && money >= scost && slevel < 5) {
 						slevel++;
 						money -= scost;
-						scost *= 4;
+						scost *= 10;
 
 						sled += 10;
 					}
@@ -185,6 +186,11 @@ public class Main extends JPanel {
 		player.setLoc(new Point(50, 150));
 		ArrayList<Clouds> clouds = new ArrayList<>();
 		r = new Ramp();
+        player.speed = 0.25;
+        player.vy = 5;
+        player.GRAVITY = 0.1;
+        player.fuel = fuel;
+        player.setDir(90);
 		for (int i = 0; i < 8; i++) {
 			clouds.add(new Clouds(i));
 		}
@@ -217,6 +223,7 @@ public class Main extends JPanel {
 		super.paintComponent(g);
 		Graphics2D g2 = (Graphics2D) g;
 		if (state == 0) {
+		    loadscreen = true;
 			g2.setColor(Color.CYAN);
 			g2.fillRect(0, 0, FRAMEWIDTH, FRAMEHEIGHT);
 
@@ -242,8 +249,8 @@ public class Main extends JPanel {
 			} else {
 				cont3 = true;
 			}
-			if (player.getLoc().x < 320 && player.getLoc().x >= 298) {
-				player.getLoc().x++;
+			if (player.getLoc().x < 320 && player.getLoc().x >= 300) {
+				player.getLoc().x += (int)(sled / 10);
 				player.getLoc().y -= sled;
 			} else {
 				cont4 = true;
@@ -277,33 +284,33 @@ public class Main extends JPanel {
 			r.draw(g2);
 			player.draw(g2);
 		} else if (state == 2) {
-			try {
-				g2.drawImage(ImageIO.read(new File("res/sky.jpg")), 0, 0, FRAMEWIDTH, FRAMEHEIGHT, null);
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-			if (pointer.intersects(buttons[1]) && money >= rcost && rlevel < 3) {
+            try {
+                g2.drawImage(ImageIO.read(new File("res/sky.jpg")), 0, 0, FRAMEWIDTH, FRAMEHEIGHT, null);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+			if (pointer.intersects(buttons[1]) && money >= rcost && rlevel < 5) {
 				g2.setColor(Color.GREEN);
 				g2.fill(buttons[1]);
-			} else if (pointer.intersects(buttons[1]) && (money < rcost || rlevel >= 3)) {
+			} else if (pointer.intersects(buttons[1]) && (money < rcost || rlevel >= 5)) {
 				g2.setColor(Color.RED);
 				g2.fill(buttons[1]);
-			} else if (pointer.intersects(buttons[2]) && money >= gcost && glevel < 3) {
+			} else if (pointer.intersects(buttons[2]) && money >= gcost && glevel < 5) {
 				g2.setColor(Color.GREEN);
 				g2.fill(buttons[2]);
-			} else if (pointer.intersects(buttons[2]) && (money < gcost || glevel >= 3)) {
+			} else if (pointer.intersects(buttons[2]) && (money < gcost || glevel >= 5)) {
 				g2.setColor(Color.RED);
 				g2.fill(buttons[2]);
-			} else if (pointer.intersects(buttons[3]) && money >= pcost && plevel < 3) {
+			} else if (pointer.intersects(buttons[3]) && money >= pcost && plevel < 5) {
 				g2.setColor(Color.GREEN);
 				g2.fill(buttons[3]);
-			} else if (pointer.intersects(buttons[3]) && (money < pcost || plevel >= 3)) {
+			} else if (pointer.intersects(buttons[3]) && (money < pcost || plevel >= 5)) {
 				g2.setColor(Color.RED);
 				g2.fill(buttons[3]);
-			} else if (pointer.intersects(buttons[4]) && money >= scost && slevel < 3) {
+			} else if (pointer.intersects(buttons[4]) && money >= scost && slevel < 5) {
 				g2.setColor(Color.GREEN);
 				g2.fill(buttons[4]);
-			} else if (pointer.intersects(buttons[4]) && (money < scost || slevel >= 3)) {
+			} else if (pointer.intersects(buttons[4]) && (money < scost || slevel >= 5)) {
 				g2.setColor(Color.RED);
 				g2.fill(buttons[4]);
 			}
@@ -317,24 +324,24 @@ public class Main extends JPanel {
 			g2.setColor(Color.BLACK);
 			g2.setFont(new Font("Comic Sans MS", Font.PLAIN, 24));
 			g2.drawString(Integer.toString(rlevel), (int) buttons[1].getX() + 55, (int) (buttons[1].getY() + 30));
-			g2.drawString("Rocket", (int) buttons[1].getX() + 35, (int) (buttons[1].getY() + 55));
+			g2.drawString("Rocket", (int) buttons[1].getX() + 25, (int) (buttons[1].getY() + 65));
 			g2.drawString(Integer.toString(rcost), (int) buttons[1].getX() + xpos(rcost),
-					(int) (buttons[1].getY() + 70));
+					(int) (buttons[1].getY() + 95));
 
 			g2.drawString(Integer.toString(glevel), (int) buttons[2].getX() + 55, (int) (buttons[2].getY() + 30));
-			g2.drawString("Glider", (int) buttons[2].getX() + 40, (int) (buttons[2].getY() + 55));
+			g2.drawString("Glider", (int) buttons[2].getX() + 25, (int) (buttons[2].getY() + 65));
 			g2.drawString(Integer.toString(gcost), (int) buttons[2].getX() + xpos(gcost),
-					(int) (buttons[2].getY() + 70));
+					(int) (buttons[2].getY() + 95));
 
 			g2.drawString(Integer.toString(plevel), (int) buttons[3].getX() + 55, (int) (buttons[3].getY() + 30));
-			g2.drawString("Payload", (int) buttons[3].getX() + 35, (int) (buttons[3].getY() + 55));
+			g2.drawString("Payload", (int) buttons[3].getX() + 20, (int) (buttons[3].getY() + 65));
 			g2.drawString(Integer.toString(pcost), (int) buttons[3].getX() + xpos(pcost),
-					(int) (buttons[3].getY() + 70));
+					(int) (buttons[3].getY() + 95));
 
 			g2.drawString(Integer.toString(slevel), (int) buttons[4].getX() + 55, (int) (buttons[4].getY() + 30));
-			g2.drawString("Vaseline", (int) buttons[4].getX() + 35, (int) (buttons[4].getY() + 55));
+			g2.drawString("Spring", (int) buttons[4].getX() + 25, (int) (buttons[4].getY() + 65));
 			g2.drawString(Integer.toString(scost), (int) buttons[4].getX() + xpos(scost),
-					(int) (buttons[4].getY() + 70));
+					(int) (buttons[4].getY() + 95));
 
 			if (pointer.intersects(buttons[0])) {
 				g2.setColor(Color.GREEN);
@@ -372,7 +379,11 @@ public class Main extends JPanel {
 			g2.setColor(Color.BLACK);
 			g2.drawRect(200, 300, 800, 50);
 			g2.setColor(Color.ORANGE);
-			g2.fillRect(200, 300, (int) ((meters / maxDistance) * 800), 50);
+            if((int)(meters / maxDistance* 800) > 800) {
+                g2.fillRect(200, 300, 800, 50);
+            }else {
+                g2.fillRect(200, 300, (int) ((meters / maxDistance) * 800), 50);
+            }
 
 			g2.setColor(Color.BLACK);
 			g2.drawString("Distance: " + (int) meters, 200, 315);
@@ -418,9 +429,9 @@ public class Main extends JPanel {
 
 	static int xpos(int cost) {
 		if (cost < 100) {
-			return 50;
-		} else {
 			return 45;
+		} else {
+			return 35;
 		}
 	}
 

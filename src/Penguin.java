@@ -1,9 +1,6 @@
-package src;
-
 import java.awt.Point;
 
 public class Penguin extends Sprite {
-    double x, y;
     double vy = 5;
     double GRAVITY = 0.1;
     double speed = 0.25;
