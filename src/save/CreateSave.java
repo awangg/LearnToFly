@@ -10,13 +10,13 @@ import java.io.IOException;
  * Created by andrew_ward on 6/2/17.
  */
 public class CreateSave {
-    public boolean create() {
+    public boolean create(double r, double g, int p, int v, int m) {
         PenguinSave ps = new PenguinSave();
-        ps.level = 1;
-        ps.rocket = 1;
-        ps.glider = 1;
-        ps.payload = 1;
-        ps.vaseline = 1;
+        ps.rocket = r;
+        ps.glider = g;
+        ps.payload = p;
+        ps.vaseline = v;
+        ps.money = m;
         try {
             File f = new File(System.getProperty("user.home") + "/learntofly/penguin.yml");
             f.getParentFile().mkdirs();
